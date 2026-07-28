@@ -17,6 +17,7 @@ they should.
 | [bridgewatch](https://github.com/roxiproject/bridgewatch) | Reconciles L1↔L2 bridge messages across OP Stack and Arbitrum Orbit chains — including Robinhood Chain — so you can find withdrawals that are stuck, unproven, or sitting unclaimed. |
 | [solana-lens](https://github.com/roxiproject/solana-lens) | Solana account inspector over public JSON-RPC, with hand-written base58 and SPL Token layout decoding instead of `solana-sdk`. |
 | [costbasis](https://github.com/roxiproject/costbasis) | Cost-basis and capital-gains reporting — FIFO/LIFO/HIFO lot matching, `Decimal` throughout, Form 8949 output. Not tax advice. |
+| [stocktoken](https://github.com/roxiproject/stocktoken) | Read-only tokenized-equity analytics for Robinhood Chain — discovers Stock Tokens from Transfer logs (no hardcoded registry), holder/concentration analytics, mint/burn issuance detection, CSV export shaped for `costbasis`. |
 
 `merkle-drop`, `streamvault` and `bridgewatch` share the same hand-written
 `keccak256`, ABI encoder and EIP-55 checksum code, each re-derived and re-tested per
@@ -24,9 +25,10 @@ repository rather than pulled from a common package — the constraint being tha
 none of them take a runtime dependency. `evm-wallet-watch` is the read side for the
 first two: the events those contracts emit are the events it decodes. `costbasis`
 is where the on-chain thread lands: disposals have to be accounted for eventually,
-and `evm-wallet-watch` output is the natural input. `bridgewatch`'s Arbitrum Orbit
-adapter is what a Robinhood Chain analytics tool like `stocktoken` (below) sits on
-top of for L1↔L2 message reconciliation.
+and both `evm-wallet-watch` and `stocktoken` produce output shaped for it directly.
+`stocktoken` sits on `bridgewatch`'s Arbitrum Orbit adapter for Robinhood Chain
+L1↔L2 message reconciliation, and deliberately discovers tokens on-chain rather
+than trusting any registry or ticker mapping.
 
 ### LLM tooling
 
